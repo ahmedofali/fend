@@ -18,14 +18,25 @@
  * 
 */
 const menuId = 'navbar__list';
+const menuElement = document.getElementById(`${menuId}`);
 const sections = document.querySelectorAll('main section');
-let navItems = [] ;
+let navMenuItems = null ;
 
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
+
+
+
+/**
+ * End Helper Functions
+ * Begin Main Functions
+ * 
+*/
+
+// build the nav
 let buildNavItems = () => {
     let documentFragment = new DocumentFragment();
 
@@ -39,29 +50,55 @@ let buildNavItems = () => {
 
         if( i === 0)
         {
-            li.classList.add('active-li');
+            li.classList.add('menu__active');
         }
 
         documentFragment.appendChild( li );
     }
 
-    document.getElementById(`${menuId}`).appendChild( documentFragment );
+    menuElement.appendChild( documentFragment );
+
+    navMenuItems = document.querySelectorAll(`#${menuId} li`);
 }
 
-/**
- * End Helper Functions
- * Begin Main Functions
- * 
-*/
-
-// build the nav
-buildNavItems();
-console.log( navItems );
 // Add class 'active' to section when near top of viewport
+/**
+ * @description Handle window scroll event
+ *
+ * @param event
+ */
+let handleWindowScrollEvent = ( event ) => {
+    let windowYPosition = window.pageYOffset ;
 
+    for (let i = 0; i < sections.length; i++)
+    {
+        if( windowYPosition >= sections[i].offsetTop - menuElement.offsetHeight ) {
+            sections[i].classList.add('active-section');
+        } else {
+            sections[i].classList.remove('active-section');
+        }
+    }
+}
 
 // Scroll to anchor ID using scrollTO event
+/**
+ * @description handle menu item click
+ *
+ * @param event
+ */
+let handleMenuItemClick = ( event ) => {
+    let target = event.target;
+    let sectionId = target.getAttribute('data-section_id');
 
+    for ( let i = 0 ; i < navMenuItems.length; i++ )
+    {
+        navMenuItems[i].classList.remove('menu__active');
+    }
+
+    target.classList.add('menu__active');
+
+    document.getElementById( sectionId ).scrollIntoView();
+}
 
 /**
  * End Main Functions
@@ -69,10 +106,15 @@ console.log( navItems );
  * 
 */
 
-// Build menu 
+// Build menu
+buildNavItems();
 
 // Scroll to section on link click
+for ( let i = 0 ; i < navMenuItems.length; i++ )
+{
+    navMenuItems[i].addEventListener('click', ( event ) => { handleMenuItemClick( event ); })
+}
 
 // Set sections as active
-
+document.addEventListener('scroll', ( event ) => { handleWindowScrollEvent( event ) } );
 

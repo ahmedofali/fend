@@ -82,10 +82,15 @@ section {
     color: #000;
 }
 
+.navbar__menu .menu__active {
+    color: grey;
+}
+
 .navbar__menu .menu__link:hover {
     background: #333;
     color: #fff;
     transition: ease 0.3s all;
+    cursor: pointer;
 }
 
 /* Header Styles */
@@ -121,6 +126,10 @@ section {
         max-width: 50em;
         padding: 4em;
     }
+}
+
+section.active-section .landing__container h2{
+    color: grey;
 }
 
 section:nth-of-type(even) .landing__container {
